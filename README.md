@@ -10,3 +10,8 @@ Alt-клик позволяет купить целый стак (или мак�
 Предметы, которые вы не можете использовать, подсвечены красным;  
 Возможность поиска упростит общение с торговцами, которые предлагают сотни различных предметов;  
 Единственный недостаток аддона - невозможность покупать заданное количество предметов.
+
+**Скриншоты:**
+
+![](https://raw.githubusercontent.com/sirus-addons/GnomishVendorShrinker/master/.screenshots/1.webp)
+![](https://raw.githubusercontent.com/sirus-addons/GnomishVendorShrinker/master/.screenshots/2.webp)
