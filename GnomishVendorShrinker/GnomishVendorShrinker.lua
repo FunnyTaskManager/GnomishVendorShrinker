@@ -174,7 +174,7 @@ end
 
 local ROWHEIGHT = 21
 local rows = {}
-for i=1,NUMROWS do
+local function CreateRow(i)
 	local row = CreateFrame('Button', nil, GVS) -- base frame
 	row:SetHeight(ROWHEIGHT)
 	row:SetPoint("TOP", i == 1 and GVS or rows[i-1], i == 1 and "TOP" or "BOTTOM")
@@ -246,7 +246,9 @@ for i=1,NUMROWS do
 	end)
 
 	rows[i] = row
+	return row
 end
+for i=1,NUMROWS do CreateRow(i) end
 
 
 local default_grad = {0,1,0,0.75, 0,1,0,0} -- green
@@ -355,12 +357,24 @@ local offset = 0
 GVS:EnableMouseWheel(true)
 GVS:SetScript("OnMouseWheel", function(self, value) scrollbar:SetValue(scrollbar:GetValue() - value * SCROLLSTEP) end)
 GVS:SetScript("OnShow", function(self, noreset)
-	local max = math.max(0, GetMerchantNumItems() - NUMROWS)
+	local max = math.max(0, GetMerchantNumItems() - #rows)
 	scrollbar:SetMinMaxValues(0, max)
 	scrollbar:SetValue(noreset and math.min(scrollbar:GetValue(), max) or 0)
 	Refresh()
 end)
 GVS:SetScript("OnHide", function() if StackSplitFrame:IsVisible() then StackSplitFrame:Hide() end end)
+
+
+function GVS:SetNumColumns(numColumns)
+	local width = (self:GetWidth() - 19 + GAP) / numColumns
+	for i=1,NUMROWS*numColumns do
+		local row = rows[i] or CreateRow(i)
+		row:ClearAllPoints()
+		row:SetPoint("TOPLEFT", math.floor((i-1)/NUMROWS)*width, -((i-1)%NUMROWS)*ROWHEIGHT)
+		row:SetWidth(width - GAP)
+	end
+	if self:IsShown() then self:GetScript("OnShow")(self, true) end
+end
 
 
 -- Reanchor the buyback button, it acts weird when switching tabs otherwise...
